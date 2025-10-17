@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Rock Paper Scissors</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
 
     <style>
         body {
@@ -115,6 +116,39 @@
             text-align: center;
             box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
         }
+
+        .reset {
+            background-color: #e8120edc;
+            color: white;
+            height: 60px;
+            width: 200px;
+            margin: 0 auto;
+            border-radius: 10px;
+            padding: 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        /* When hover */
+        .reset:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 15px rgba(232, 18, 14, 0.7);
+        }
+
+        /* When actively clicked */
+        .reset:active {
+            transform: scale(0.95);
+        }
+
+        .your,
+        .comp {
+            border-radius: 10px;
+            background-color: #1F1F1F;
+            text-align: center;
+            width: 120px;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+        }
     </style>
 </head>
 
@@ -127,8 +161,9 @@
                 <h3 class="rountCount">1</h3>
                 <h3><b>&nbsp;/ 3</b></h3>
             </div>
+
             <div class="reach">
-                <h3>Reach 5 points to Win</h3>
+                <h4>Reach 5 points to Win</h4>
             </div>
         </div>
     </div>
@@ -154,14 +189,33 @@
     </div>
 
     <!-- Message Box -->
-    <div class="msg">
-        <h3>Pick your Move</h3>
+    <div class="bottom d-flex justify-content-center gap-6 my-5">
+        <div class="your text-center">
+            <i class="bi bi-person-fill" style="font-size: 3rem; color: #00bfff;"></i>
+            <h3 class="userRound">0</h3>
+            <h5>You</h5>
+        </div>
+        <div class="text">
+            <div class="msg">
+                <h3>Pick your Move</h3>
+            </div>
+
+            <div class="reset my-3 text-center justify-content-center d-flex">
+                <h3>Reset Score</h3>
+            </div>
+        </div>
+        <div class="comp text-center">
+            <i class="bi bi-cpu-fill" style="font-size: 3rem; color: #ffcc00;"></i>
+            <h3 class="compRound">0</h3>
+            <h5>Computer</h5>
+        </div>
     </div>
+
 
     <!-- Modal HTML -->
     <div class="modal fade" id="resultModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content bg-dark text-white">
+            <div class="modal-content text-white">
                 <div class="modal-header border-0">
                     <h5 class="modal-title" id="modalTitle">You Win!</h5>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
@@ -188,9 +242,23 @@
         let uPoint = 0
         let cPoint = 0
         let round = 1
+        let winRound = 0
+        let lostRound = 0
         stone.addEventListener("click", () => userMove(lst[0]))
         paper.addEventListener("click", () => userMove(lst[1]))
         scissor.addEventListener("click", () => userMove(lst[2]))
+        document.querySelector(".reset").addEventListener("click", () => {
+            uPoint = 0;
+            cPoint = 0;
+            round = 1;
+            winRound = 0;
+
+            document.querySelector("#yourPoint").innerText = uPoint;
+            document.querySelector("#compPoint").innerText = cPoint;
+            document.querySelector(".rountCount").innerText = round;
+            document.querySelector(".msg").innerText = "Pick your Move";
+            document.querySelector(".msg").style.backgroundColor = "#2C2C2C";
+        });
         comPick = () => {
             return lst[Math.floor(Math.random() * lst.length)]
         }
@@ -248,7 +316,13 @@
 
         function userMove(userIn) {
             if ((round == 3) && (uPoint == 4 || cPoint == 4)) {
-                showResult("You Win!", "You complete all rounds");
+                if (winRound > 1) {
+                    showResult("You Win!", "You complete all rounds");
+                } else {
+                    showResult("You lost!", "You complete all rounds");
+                }
+
+
             };
 
             if (uPoint < 5 && cPoint < 5) {
@@ -258,11 +332,16 @@
                 console.log(userIn, com)
             }
 
+
             if (uPoint >= 5 || cPoint == 5) {
                 if (uPoint >= 5) {
                     document.querySelector(".msg").innerText = "You Win this Round"
+                    winRound++;
+                    document.querySelector(".userRound").innerText = winRound
                 } else {
                     document.querySelector(".msg").innerText = "Computer Win this Round"
+                    lostRound++;
+                    document.querySelector(".compRound").innerText = lostRound
                 }
                 uPoint = 0
                 cPoint = 0
@@ -281,9 +360,23 @@
         }
 
         function showResult(title, message) {
+            if (title == "You Win!") {
+                document.querySelector(".modal-content").style = "background-color: #00C853"
+            } else {
+                document.querySelector(".modal-content").style = "background-color: #C2185B"
+            }
             document.getElementById("modalTitle").innerText = title;
             document.getElementById("modalMessage").innerText = message;
-
+            uPoint = 0
+            cPoint = 0
+            round = 0
+            winRound = 0
+            lostRound = 0
+            document.querySelector("#yourPoint").innerText = uPoint
+            document.querySelector("#compPoint").innerText = cPoint
+            document.querySelector(".rountCount").innerText = round
+            document.querySelector(".userRound").innerText = winRound
+            document.querySelector(".compRound").innerText = lostRound
             // Use Bootstrap JS to show modal
             let resultModal = new bootstrap.Modal(document.getElementById('resultModal'));
             resultModal.show();
