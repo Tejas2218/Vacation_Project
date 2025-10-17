@@ -103,16 +103,39 @@
             gap: 6rem;
         }
 
-        .mt-7 {
-            margin-top: 7rem !important;
+        .mt-6 {
+            margin-top: 6rem !important;
+        }
+
+        .round,
+        .reach {
+            padding: 15px;
+            border-radius: 10px;
+            background-color: #1F1F1F;
+            text-align: center;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
         }
     </style>
 </head>
 
 <body>
 
+    <div class="container">
+        <div class="scoreAll d-flex justify-content-between align-items-center my-5">
+            <div class="round d-flex justify-content-center">
+                <h3>Round :&nbsp;</h3>
+                <h3 class="rountCount">1</h3>
+                <h3><b>&nbsp;/ 3</b></h3>
+            </div>
+            <div class="reach">
+                <h3>Reach 5 points to Win</h3>
+            </div>
+        </div>
+    </div>
+
+
     <!-- Circles -->
-    <div class="container mt-7 d-flex justify-content-center gap-4">
+    <div class="container mt-6 d-flex justify-content-center gap-4">
         <div class="stone">Stone</div>
         <div class="paper">Paper</div>
         <div class="scissor">Scissor</div>
@@ -135,6 +158,25 @@
         <h3>Pick your Move</h3>
     </div>
 
+    <!-- Modal HTML -->
+    <div class="modal fade" id="resultModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content bg-dark text-white">
+                <div class="modal-header border-0">
+                    <h5 class="modal-title" id="modalTitle">You Win!</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <p id="modalMessage">You scored 5 points first!</p>
+                </div>
+                <div class="modal-footer border-0">
+                    <button type="button" class="btn btn-success" data-bs-dismiss="modal">OK</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
 
     <script>
@@ -145,27 +187,10 @@
         let userIn;
         let uPoint = 0
         let cPoint = 0
-        stone.addEventListener("click", () => {
-            userIn = lst[0];
-            com = comPick()
-            animation(userIn, com)
-            check(userIn, com)
-            console.log(userIn, comPick())
-        })
-        paper.addEventListener("click", () => {
-            userIn = lst[1];
-            com = comPick()
-            animation(userIn, com)
-            check(userIn, com)
-            console.log(userIn, comPick())
-        })
-        scissor.addEventListener("click", () => {
-            userIn = lst[2];
-            com = comPick()
-            animation(userIn, com)
-            check(userIn, com)
-            console.log(userIn, comPick())
-        })
+        let round = 1
+        stone.addEventListener("click", () => userMove(lst[0]))
+        paper.addEventListener("click", () => userMove(lst[1]))
+        scissor.addEventListener("click", () => userMove(lst[2]))
         comPick = () => {
             return lst[Math.floor(Math.random() * lst.length)]
         }
@@ -221,9 +246,48 @@
             }
         }
 
-        setTimeout(() => {
-            removeBorder()
-        }, 3000);
+        function userMove(userIn) {
+            if ((round == 3) && (uPoint == 4 || cPoint == 4)) {
+                showResult("You Win!", "You complete all rounds");
+            };
+
+            if (uPoint < 5 && cPoint < 5) {
+                let com = comPick()
+                animation(userIn, com)
+                check(userIn, com)
+                console.log(userIn, com)
+            }
+
+            if (uPoint >= 5 || cPoint == 5) {
+                if (uPoint >= 5) {
+                    document.querySelector(".msg").innerText = "You Win this Round"
+                } else {
+                    document.querySelector(".msg").innerText = "Computer Win this Round"
+                }
+                uPoint = 0
+                cPoint = 0
+                document.querySelector("#yourPoint").innerText = uPoint
+                document.querySelector("#compPoint").innerText = cPoint
+
+                round++
+                document.querySelector(".rountCount").innerText = round
+
+            }
+
+            setTimeout(() => {
+                removeBorder()
+            }, 1200);
+
+        }
+
+        function showResult(title, message) {
+            document.getElementById("modalTitle").innerText = title;
+            document.getElementById("modalMessage").innerText = message;
+
+            // Use Bootstrap JS to show modal
+            let resultModal = new bootstrap.Modal(document.getElementById('resultModal'));
+            resultModal.show();
+        }
 
     </script>
 
