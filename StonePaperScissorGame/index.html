@@ -1,0 +1,202 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Rock Paper Scissors</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <style>
+    body {
+      background-color: #121212;
+      color: white;
+      font-family: 'Segoe UI', Tahoma, sans-serif;
+    }
+
+    /* Circles */
+    .stone,
+    .paper,
+    .scissor {
+      height: 200px;
+      width: 200px;
+      border-radius: 100px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-weight: bold;
+      font-size: 1.2rem;
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+
+    .stone {
+      background-color: #6B6B6B;
+      color: white;
+    }
+
+    .paper {
+      background-color: #4CAF50;
+      color: white;
+    }
+
+    .scissor {
+      background-color: #E53935;
+      color: white;
+    }
+
+    .stone:hover,
+    .paper:hover,
+    .scissor:hover {
+      transform: scale(1.1);
+    }
+
+    /* Score boxes */
+    .score div {
+      width: 120px;
+      padding: 15px;
+      border-radius: 10px;
+      background-color: #1F1F1F;
+      text-align: center;
+      box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+    }
+
+    .score h3 {
+      margin: 0;
+      font-size: 2rem;
+    }
+
+    .score h5 {
+      margin: 0;
+      font-size: 1rem;
+      color: #BBBBBB;
+    }
+
+    /* Message box */
+    .msg {
+      background-color: #2C2C2C;
+      color: #FFFFFF;
+      width: 220px;
+      margin: 0 auto;
+      border-radius: 10px;
+      padding: 10px;
+      text-align: center;
+      box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+    }
+
+    /* Custom gap fix */
+    .gap-6 {
+      gap: 6rem;
+    }
+
+    .mt-7 {
+      margin-top: 7rem !important;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Circles -->
+  <div class="container mt-7 d-flex justify-content-center gap-4">
+    <div class="stone">Stone</div>
+    <div class="paper">Paper</div>
+    <div class="scissor">Scissor</div>
+  </div>
+
+  <!-- Score -->
+  <div class="score d-flex justify-content-center gap-6 my-5">
+    <div class="your text-center">
+      <h3 id="yourPoint">0</h3>
+      <h5>Your</h5>
+    </div>
+    <div class="comp text-center">
+      <h3 id="compPoint">0</h3>
+      <h5>Comp</h5>
+    </div>
+  </div>
+
+  <!-- Message Box -->
+  <div class="msg">
+    <h3>Pick your Move</h3>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script>
+    let lst = ["stone","paper","scissor"]
+    let stone = document.querySelector(".stone")
+    let paper = document.querySelector(".paper")
+    let scissor = document.querySelector(".scissor")
+    let userIn;
+    let uPoint = 0
+    let cPoint = 0
+    stone.addEventListener("click", ()=>{
+        userIn = lst[0];
+        com = comPick()
+        check(userIn,com)
+        console.log(userIn, comPick())
+    })
+    paper.addEventListener("click", ()=>{
+        userIn = lst[1];
+        com = comPick()
+        check(userIn,com)
+        console.log(userIn, comPick())
+    })
+    scissor.addEventListener("click", ()=>{
+        userIn = lst[2];
+        com = comPick()
+        check(userIn,com)
+        console.log(userIn, comPick())
+    })
+    comPick = ()=>{
+        return lst[Math.floor(Math.random()*lst.length)]
+    }
+    function check(userIn,com){
+        if(userIn == com){
+            document.querySelector(".msg").innerText = "Match is Draw"
+            document.querySelector(".msg").style = "background-color: grey;"
+        }
+        else if(userIn == lst[0] && com == lst[1]){
+            document.querySelector(".msg").innerText = "You Lost, paper beats stone"
+            document.querySelector(".msg").style = "background-color: red;"
+            cPoint++;
+            document.querySelector("#compPoint").innerText = cPoint
+        }
+        else if(userIn == lst[0] && com == lst[2]){
+            document.querySelector(".msg").innerText = "You Won, stone beats Scisson"
+            document.querySelector(".msg").style = "background-color: green;"
+            uPoint++;
+            document.querySelector("#yourPoint").innerText = uPoint
+        }
+        else if(userIn == lst[1] && com == lst[0]){
+            document.querySelector(".msg").innerText = "You Won, paper beats stone"
+            document.querySelector(".msg").style = "background-color: green;"
+            uPoint++;
+            document.querySelector("#yourPoint").innerText = uPoint
+            
+        }
+        else if(userIn == lst[1] && com == lst[2]){
+            document.querySelector(".msg").innerText = "You Lost, Scissor beats paper"
+            document.querySelector(".msg").style = "background-color: red;"
+            cPoint++;
+            document.querySelector("#compPoint").innerText = cPoint
+        }
+        else if(userIn == lst[2] && com == lst[0]){
+            document.querySelector(".msg").innerText = "You Lost, stone beats Scisson"
+            document.querySelector(".msg").style = "background-color: red;"
+            cPoint++;
+            document.querySelector("#compPoint").innerText = cPoint
+        }
+        else if(userIn == lst[2] && com == lst[1]){
+            document.querySelector(".msg").innerText = "You Won, Scissor beats paper"
+            document.querySelector(".msg").style = "background-color: green;"
+            uPoint++;
+            document.querySelector("#yourPoint").innerText = uPoint
+        }
+    }
+  </script>
+
+</body>
+
+</html>
