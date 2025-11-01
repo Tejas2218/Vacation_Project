@@ -1,0 +1,23 @@
+{
+  "name": "tejas",
+  "version": "1.0.0",
+  "description": "its an good package",
+  "homepage": "https://github.com/Tejas2218/Vacation_Project#readme",
+  "bugs": {
+    "url": "https://github.com/Tejas2218/Vacation_Project/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Tejas2218/Vacation_Project.git"
+  },
+  "license": "ISC",
+  "author": "tejas",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "express": "^5.1.0"
+  }
+}
