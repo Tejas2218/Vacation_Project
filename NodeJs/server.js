@@ -1,8 +1,6 @@
 const express = require('express')
 const app = express()
 const db = require('./db')
-const Person = require('./models/person')
-const manuItem = require('./models/manu')
 const bodyParser = require('body-parser');
 app.use(bodyParser.json())
 
@@ -10,6 +8,30 @@ app.use(bodyParser.json())
 app.get('/', function (req, res) {
     res.send("Welcome to my hotel, How can i help you")
 })
+
+//import the router file
+const personRoutes = require("./routes/personRoutes")
+const manuRoutes = require('./routes/manuRoutes')
+
+//use the router file
+app.use("/person",personRoutes)
+app.use("/manu",manuRoutes)
+
+app.listen(3000, () => {
+    console.log(`server is running in port: 3000`)
+})
+
+
+
+
+
+
+
+
+
+
+
+
 
 // app.get('/panjabi',(req,res)=>{
 //     res.send('sure sir, i would love to serve panjabi')
@@ -30,92 +52,6 @@ app.get('/', function (req, res) {
 //     console.log("data is seved")
 //     res.send("data is seved")
 // })
-
-app.post('/person', async (req, res) => {
-
-    try {
-
-        const data = req.body
-
-        const newPerson = new Person(data)
-
-        const response = await newPerson.save()
-        console.log("data saved")
-        res.status(200).json(response)
-
-        // newPerson.save((error, savedPerson) => {
-        //     if (error) {
-        //         console.log("error saving person:", error)
-        //         res.status(500).json({ error: 'Internal seerver error' })
-        //     } else {
-        //         console.log("data save succesfully")
-        //         res.status(200).json(savedPerson)
-        //     }
-        // })
-        //depricated
-
-    } catch (err) {
-        console.log("error saving person:", err)
-        res.status(500).json({ error: 'Internal seerver error "person-post" ' })
-    }
-
-
-})
-
-app.get('/person', async (req,res)=>{
-    try{
-        const data = await Person.find()
-        console.log("data Found")
-        res.status(200).json(data)
-    }catch(err){
-        console.log("error finding person:", err)
-        res.status(500).json({ error: 'Internal seerver error "person-get"' })
-    }
-})
-
-app.get("/manu", async (req,res)=>{
-    try{
-        const data = await manuItem.find()
-        console.log("data found")
-        res.status(200).json(data)
-    }catch(err){
-        console.log("error finding manu",err)
-        res.status(500).json({error: 'internal server error "manu-get"'})
-    }
-})
-
-app.post("/manu", async (req,res)=>{
-    try{
-        const data = req.body
-
-        const newManu = new manuItem(data)
-
-        const response = await newManu.save()
-        console.log(`Data add Succesfully ${data}`)
-        res.status(200).json(data)
-        
-    }catch(err){
-        console.log(`error of saving data in manu ${err}`)
-        res.status(500).json({error: 'internal server error "manu-post"'})
-    }
-})
-
-app.listen(3000, () => {
-    console.log(`server is running in port: 3000`)
-})
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
