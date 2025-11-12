@@ -31,7 +31,7 @@ const personRoutes = require("./routes/personRoutes")
 const manuRoutes = require('./routes/manuRoutes')
 
 //use the router file
-app.use("/person",localAuthMiddleware , personRoutes)
+app.use("/person", personRoutes)
 app.use("/manu", manuRoutes)
 
 app.listen(PORT, () => {
